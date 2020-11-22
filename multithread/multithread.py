@@ -17,14 +17,15 @@ class GPUThread(threading.Thread):
         self.some_array = some_array
 
     def run(self):
-        self.dev = cuda.Device(self.number)
+        #self.dev = cuda.Device(self.number)
+        self.dev = cuda.Device(0)
         self.ctx = self.dev.make_context()
 
         self.array_gpu = cuda.mem_alloc(some_array.nbytes)
         cuda.memcpy_htod(self.array_gpu, some_array)
 
         test_kernel(self.array_gpu)
-        print "successful exit from thread %d" % self.number
+        print("successful exit from thread %d" % self.number)
         self.ctx.pop()
 
         del self.array_gpu
@@ -55,7 +56,7 @@ some_array = numpy.ones((1,512), dtype=numpy.float32)
 num = cuda.Device.count()
 
 gpu_thread_list = []
-for i in range(num):
+for i in range(4):
     gpu_thread = GPUThread(i, some_array)
     gpu_thread.start()
     gpu_thread_list.append(gpu_thread)
