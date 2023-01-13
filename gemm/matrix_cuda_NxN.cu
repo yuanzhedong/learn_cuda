@@ -2,11 +2,14 @@
 
 #define N  64
 
+// The reason we want to use a 2D Grid and block dimensions is because the output c is 2D
+
+//blockDim.x = 16, GridDim.x=(N + 16 - 1)/16
 __global__ void matrixMulGPU( int * a, int * b, int * c )
 {
   int val = 0;
 
-  int row = blockIdx.x * blockDim.x + threadIdx.x;  //blockDim.x = 16, GridDim.x=(N + 16 - 1)/16
+  int row = blockIdx.x * blockDim.x + threadIdx.x;
   int col = blockIdx.y * blockDim.y + threadIdx.y;
 
   if (row < N && col < N)
